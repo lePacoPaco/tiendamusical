@@ -3,6 +3,8 @@
  */
 package com.ejemplo.tiendamusicalweb.controllers;
 
+import java.io.IOException;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -11,6 +13,7 @@ import javax.faces.bean.ViewScoped;
 
 import com.ejemplo.tiendamusicalentities.entities.Persona;
 import com.ejemplo.tiendamusicalservices.service.LoginService;
+import com.ejemplo.tiendamusicalweb.session.SessionBean;
 import com.ejemplo.tiendamusicalweb.utils.CommonUtils;
 
 /**
@@ -34,6 +37,12 @@ public class LoginController {
 	/**
 	 * Propiedad de la lógica de negocio inyectada con JSF y Spring
 	 */
+	@ManagedProperty("#{sessionBean}")
+	private SessionBean sessionBean;
+	
+	/**
+	 * Propiedad de la lógica de negocio inyectada con JSF y Spring
+	 */
 	@ManagedProperty("#{loginServiceImpl}")
 	private LoginService loginServiceImpl; 
 	
@@ -49,7 +58,14 @@ public class LoginController {
 		Persona personaConsultada = this.loginServiceImpl.consultarUsuarioLogin(usuario, password);
 		
 		if (personaConsultada != null) {
-			CommonUtils.mostrarMensaje(FacesMessage.SEVERITY_INFO, "¡Exitoso!", "Bienvenidos al Home :D");
+			try {
+				this.sessionBean.setPersona(personaConsultada);
+				CommonUtils.redireccionar("/pages/commons/dashboard.xhtml");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				CommonUtils.mostrarMensaje(FacesMessage.SEVERITY_FATAL, "¡Error!", "Formato incorrecto para ingresar a la pantalla deseada.");
+			}
 		} else {
 			CommonUtils.mostrarMensaje(FacesMessage.SEVERITY_ERROR, "¡Ups!", "Usuario y/o contraseña incorrectos.");
 		}
@@ -96,5 +112,19 @@ public class LoginController {
 	 */
 	public void setLoginServiceImpl(LoginService loginServiceImpl) {
 		this.loginServiceImpl = loginServiceImpl;
+	}
+
+	/**
+	 * @return the sessionBean
+	 */
+	public SessionBean getSessionBean() {
+		return sessionBean;
+	}
+
+	/**
+	 * @param sessionBean the sessionBean to set
+	 */
+	public void setSessionBean(SessionBean sessionBean) {
+		this.sessionBean = sessionBean;
 	}
 }
