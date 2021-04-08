@@ -1,9 +1,11 @@
-/**
+	/**
  * 
  */
 package com.ejemplo.tiendamusicalweb.controllers;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -11,6 +13,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.ejemplo.tiendamusicalentities.entities.CarritoAlbum;
 import com.ejemplo.tiendamusicalentities.entities.Persona;
 import com.ejemplo.tiendamusicalservices.service.LoginService;
 import com.ejemplo.tiendamusicalweb.session.SessionBean;
@@ -23,6 +29,11 @@ import com.ejemplo.tiendamusicalweb.utils.CommonUtils;
 @ManagedBean
 @ViewScoped
 public class LoginController {
+	
+	/**
+	 * Objeto que permite mostrar los mensajes de LOG en la consola del servidor o en el archivo externo
+	 */
+	private static final Logger LOGGER = LogManager.getLogger(LoginController.class);
 
 	/**
 	 * Usuario capturado por la persona.
@@ -59,6 +70,13 @@ public class LoginController {
 		
 		if (personaConsultada != null) {
 			try {
+				List<CarritoAlbum> carritoAlbumFiltrados =  personaConsultada.getCarrito().getCarritosAlbum().stream().filter( ca -> 
+					ca.getEstatus().equals("PENDIENTE")).collect(Collectors.toList());
+				
+				personaConsultada.getCarrito().setCarritosAlbum(carritoAlbumFiltrados);
+				
+				LOGGER.info("Albums del carrito filtrados: " + personaConsultada.getCarrito().getCarritosAlbum().size());
+				
 				this.sessionBean.setPersona(personaConsultada);
 				CommonUtils.redireccionar("/pages/commons/dashboard.xhtml");
 			} catch (IOException e) {

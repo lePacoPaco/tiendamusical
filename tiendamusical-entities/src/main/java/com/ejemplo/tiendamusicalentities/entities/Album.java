@@ -42,7 +42,7 @@ public class Album extends Common{
 	private String formato;
 	
 	@Column(name = "valor", nullable = false)
-	private String valor;
+	private double valor;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "idDisquera")
@@ -54,6 +54,8 @@ public class Album extends Common{
 	
 	@Column(name = "raiting")
 	private int raiting;
+	
+	
 
 	/**
 	 * @return the idAlbum
@@ -142,14 +144,14 @@ public class Album extends Common{
 	/**
 	 * @return the valor
 	 */
-	public String getValor() {
+	public double getValor() {
 		return valor;
 	}
 
 	/**
 	 * @param valor the valor to set
 	 */
-	public void setValor(String valor) {
+	public void setValor(double valor) {
 		this.valor = valor;
 	}
 

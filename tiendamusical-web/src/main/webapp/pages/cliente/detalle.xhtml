@@ -59,12 +59,14 @@
 										<p:outputLabel
 											value="#{sessionBean.artistaAlbumDTO.album.valor}"
 											style="color: white">
-											<f:convertNumber type="currency" currencyCode="MXN"
-												currencySymbol="$"></f:convertNumber>
+											<f:convertNumber type="currency" currencyCode="MXN" currencySymbol="$"></f:convertNumber>
 										</p:outputLabel>
 
-										<p:commandButton icon="pi pi-shopping-cart" />
-										<p:selectOneMenu id="cboCantidad" value="">
+										<p:commandButton icon="pi pi-shopping-cart"
+											action="#{detalleController.agregarAlbumCarrito(sessionBean.artistaAlbumDTO)}" 
+											update="formDetalle:btnShopping"/>
+										<p:selectOneMenu id="cboCantidad"
+											value="#{detalleController.cantidadAlbumSeleccionada}">
 											<f:selectItem itemValue="1" itemLabel="1"
 												noSelectionOption="true" />
 											<f:selectItem itemValue="2" itemLabel="2" />

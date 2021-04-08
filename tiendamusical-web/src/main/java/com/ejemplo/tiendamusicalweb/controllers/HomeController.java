@@ -27,9 +27,7 @@ import com.ejemplo.tiendamusicalweb.utils.CommonUtils;
 @ManagedBean
 @ViewScoped
 public class HomeController {
-	
-	
-	
+
 	/**
 	 * Objeto que permite mostrar los mensajes de LOG en la consola del servidor o en el archivo externo
 	 */
